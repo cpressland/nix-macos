@@ -15,90 +15,6 @@
   let
     configuration = { pkgs, ... }: {
       nixpkgs.config.allowUnfree = true;
-      environment.systemPackages = [
-        pkgs.fish
-        pkgs.zsh
-        pkgs.starship
-        pkgs.atuin
-        pkgs.tmux
-        pkgs.neovim
-        pkgs.vim
-        pkgs.git
-        pkgs.eza
-        pkgs.bat
-        pkgs.fluxcd
-        pkgs.kubectl
-        pkgs.kubelogin
-        pkgs.kubernetes-helm
-        pkgs.opentofu
-        pkgs.jq
-        pkgs.uv
-        pkgs.just
-        pkgs.ripgrep
-        pkgs.kustomize
-        pkgs.magic-wormhole
-        pkgs.mosquitto
-        pkgs.openssl
-        pkgs.rclone
-        pkgs.redis
-        pkgs.rsync
-        pkgs.tree
-        pkgs.trivy
-        pkgs.wget
-        pkgs.wireguard-tools
-        pkgs.yubikey-manager
-        pkgs.zstd
-      ];
-      fonts.packages = [
-        pkgs.cascadia-code
-        (pkgs.nerdfonts.override { fonts = [ "CascadiaCode" ]; })
-	    ];
-
-      homebrew = {
-        enable = true;
-        onActivation = {
-          cleanup = "zap";
-          autoUpdate = true;
-          upgrade = true;
-        };
-        taps = ["hashicorp/tap"];
-        brews = [
-          "hashicorp/tap/terraform"
-          "azure-cli"
-          "bash"
-          "mas"
-          "poetry"
-          "pipenv"
-          "pipx"
-          "go"
-          "node"
-          "python@3.13"
-          "python@3.12"
-          "python@3.11"
-          "python@3.10"
-          "python@3.9"
-          "postgresql@15"
-          "postgresql@16"
-          "rust"
-          "watch"
-          "yarn"
-          "yt-dlp"
-        ];
-        casks = [
-          "1password"
-          "1password-cli"
-          "steam"
-          "firefox"
-          "wezterm"
-          "visual-studio-code"
-        ];
-        masApps = {
-          "Tailscale" = 1475387142;
-          "Wireguard" = 1451685025;
-          "Slack" = 803453959;
-        };
-      };
-
       services.nix-daemon.enable = true;
       nix.settings.experimental-features = "nix-command flakes";
       programs.zsh.enable = true;
@@ -131,6 +47,7 @@
     darwinConfigurations."macbook" = nix-darwin.lib.darwinSystem {
       modules = [
         configuration
+        (import ./hosts/macbook/config.nix)
         nix-homebrew.darwinModules.nix-homebrew {
           nix-homebrew = {
             enable = true;
@@ -145,6 +62,25 @@
         }
       ];
     };
-    darwinPackages = self.darwinConfigurations."macbook".pkgs;
+    darwinPackagesMacBook = self.darwinConfigurations."macbook".pkgs;
+    darwinConfigurations."mini" = nix-darwin.lib.darwinSystem {
+      modules = [
+        configuration
+        (import ./hosts/mini/config.nix)
+        nix-homebrew.darwinModules.nix-homebrew {
+          nix-homebrew = {
+            enable = true;
+            enableRosetta = true;
+            user = "cpressland";
+          };
+        }
+        home-manager.darwinModules.home-manager {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.cpressland = homeconfig;
+        }
+      ];
+    };
+    darwinPackagesMini = self.darwinConfigurations."mini".pkgs;
   };
 }
