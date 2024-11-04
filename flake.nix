@@ -93,5 +93,5 @@
         home-manager.users.cpressland = import ./home-manager/wsl.nix;
       }
     ];
-  }
+  };
 }
