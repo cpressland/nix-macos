@@ -17,21 +17,6 @@
         "type": "github"
       }
     },
-    "dots": {
-      "locked": {
-        "lastModified": 1730588638,
-        "narHash": "sha256-Z7VMs/1Ui80QfYMINC2M+qxbNxEgP4i2DDLuecnlLxU=",
-        "owner": "cpressland",
-        "repo": "dots",
-        "rev": "abd376d4b05f2a97677718d8ca8e7f1f83e5f1c5",
-        "type": "github"
-      },
-      "original": {
-        "owner": "cpressland",
-        "repo": "dots",
-        "type": "github"
-      }
-    },
     "flake-utils": {
       "inputs": {
         "systems": "systems"
@@ -176,7 +161,6 @@
     },
     "root": {
       "inputs": {
-        "dots": "dots",
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",

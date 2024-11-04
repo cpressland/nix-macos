@@ -8,10 +8,9 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
-    dots.url = "github:cpressland/dots";
   };
 
-  outputs = inputs@{ self, dots, nixpkgs, nix-darwin, nix-homebrew, home-manager }:
+  outputs = inputs@{ self, nixpkgs, nix-darwin, nix-homebrew, home-manager }:
   let
     configuration = { pkgs, ... }: {
       nixpkgs.config.allowUnfree = true;
@@ -21,32 +20,24 @@
       programs.fish.enable = true;
       system.configurationRevision = self.rev or self.dirtyRev or null;
       system.stateVersion = 5;
-      nixpkgs.hostPlatform = "aarch64-darwin";
-
-      users.users.cpressland.home = "/Users/cpressland";
       home-manager.backupFileExtension = "backup";
       nix.configureBuildUsers = true;
       nix.useDaemon = true;
     };
-    homeconfig = { pkgs, dots, ... }: {
-      home.username = "cpressland";
-      home.homeDirectory = "/Users/cpressland";
-      home.stateVersion = "24.05";
-      programs.home-manager.enable = true;
-      home.file = {
-        ".config/nix".source = "${inputs.dots}/nix";
-        ".config/wezterm".source = "${inputs.dots}/wezterm";
-        ".config/starship.toml".source = "${inputs.dots}/starship/starship.toml";
-        ".config/fish".source = "${inputs.dots}/fish";
-        ".gitconfig".source = "${inputs.dots}/git/macos/gitconfig";
-        ".ssh/config".source = "${inputs.dots}/ssh/config";
-      };
+    configurationMac = { pkgs, ... }: {
+      users.users.cpressland.home = "/Users/cpressland";
+      nixpkgs.hostPlatform = "aarch64-darwin";
+    };
+    configurationLinux = { pkgs, ... }: {
+      users.users.cpressland.home = "/home/cpressland";
+      nixpkgs.hostPlatform = "x86_64-linux";
     };
   in
   {
     darwinConfigurations."macbook" = nix-darwin.lib.darwinSystem {
       modules = [
         configuration
+        configurationMac
         (import ./hosts/macbook/config.nix)
         nix-homebrew.darwinModules.nix-homebrew {
           nix-homebrew = {
@@ -58,7 +49,7 @@
         home-manager.darwinModules.home-manager {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.cpressland = homeconfig;
+          home-manager.users.cpressland = import ./home-manager/macos.nix;
         }
       ];
     };
@@ -66,6 +57,7 @@
     darwinConfigurations."mini" = nix-darwin.lib.darwinSystem {
       modules = [
         configuration
+        configurationMac
         (import ./hosts/mini/config.nix)
         nix-homebrew.darwinModules.nix-homebrew {
           nix-homebrew = {
@@ -77,10 +69,29 @@
         home-manager.darwinModules.home-manager {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.cpressland = homeconfig;
+          home-manager.users.cpressland = import ./home-manager/macos.nix;
         }
       ];
     };
     darwinPackagesMini = self.darwinConfigurations."mini".pkgs;
   };
+  nixosConfigurations."wsl" = nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    modules = [
+      configuration
+      configurationLinux
+      (import ./hosts/wsl/config.nix)
+      nix-homebrew.nixosModules.nix-homebrew {
+        nix-homebrew = {
+          enable = true;
+          user = "cpressland";
+        };
+      }
+      home-manager.nixosModules.home-manager {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.users.cpressland = import ./home-manager/wsl.nix;
+      }
+    ];
+  }
 }
