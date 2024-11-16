@@ -75,23 +75,4 @@
     };
     darwinPackagesMini = self.darwinConfigurations."mini".pkgs;
   };
-  nixosConfigurations."wsl" = nixpkgs.lib.nixosSystem {
-    system = "x86_64-linux";
-    modules = [
-      configuration
-      configurationLinux
-      (import ./hosts/wsl/config.nix)
-      nix-homebrew.nixosModules.nix-homebrew {
-        nix-homebrew = {
-          enable = true;
-          user = "cpressland";
-        };
-      }
-      home-manager.nixosModules.home-manager {
-        home-manager.useGlobalPkgs = true;
-        home-manager.useUserPackages = true;
-        home-manager.users.cpressland = import ./home-manager/wsl.nix;
-      }
-    ];
-  };
 }

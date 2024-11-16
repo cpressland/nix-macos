@@ -10,6 +10,7 @@
     brews = [
       "hashicorp/tap/terraform"
       "azure-cli"
+      "awscli"
       "bash"
       "mas"
       "poetry"
@@ -37,6 +38,8 @@
       "wezterm"
       "visual-studio-code"
       "docker"
+      "iina"
+      "telegram"
     ];
     masApps = {
       "Tailscale" = 1475387142;
