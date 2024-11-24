@@ -32,6 +32,7 @@
     pkgs.wireguard-tools
     pkgs.yubikey-manager
     pkgs.zstd
+    pkgs.ffmpeg
   ];
   fonts.packages = [
     pkgs.cascadia-code
