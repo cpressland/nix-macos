@@ -24,6 +24,7 @@
     pkgs.wget
     pkgs.wireguard-tools
     pkgs.zstd
+    pkgs.ffmpeg
   ];
   fonts.packages = [
     pkgs.cascadia-code
