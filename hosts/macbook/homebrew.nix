@@ -46,6 +46,9 @@
       "Wireguard" = 1451685025;
       "Slack" = 803453959;
       "Amphetamine" = 937984704;
+      "SponsorBlock for Safari" = 1573461917;
+      "Wipr 2" = 1662217862;
+      "Cascadea" = 1432182561;
     };
   };
 }
