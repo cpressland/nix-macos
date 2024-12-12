@@ -36,6 +36,6 @@
   ];
   fonts.packages = [
     pkgs.cascadia-code
-    (pkgs.nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+    pkgs.nerd-fonts.caskaydia-cove
   ];
 }
