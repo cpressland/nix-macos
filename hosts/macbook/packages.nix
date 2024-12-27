@@ -21,7 +21,7 @@
     pkgs.just
     pkgs.ripgrep
     pkgs.kustomize
-    pkgs.magic-wormhole
+    # pkgs.magic-wormhole // tests are currently failing.
     pkgs.mosquitto
     pkgs.rclone
     pkgs.redis
