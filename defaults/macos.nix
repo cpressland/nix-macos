@@ -4,6 +4,8 @@
       NSGlobalDomain = {
         AppleHighlightColor = "1.000000 0.749020 0.823529 Pink";
         AppleAccentColor = 6;
+        NSWindowShouldDragOnGesture = true;
+        NSWindowShouldDragOnGestureFeedback = false;
       };
       "~/Library/Preferences/com.apple.finder.plist" = {
         NewWindowTarget = "PfHm";
